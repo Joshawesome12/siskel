@@ -18,12 +18,16 @@ var Movies = Backbone.Collection.extend({
 
   initialize: function() {
     // your code here
+    this.on('change', this.sort, this);
   },
 
   comparator: 'title',
 
   sortByField: function(field) {
+    //this === collection ? 
     // your code here
+    this.comparator = field;
+    this.sort();
   }
 
 });
@@ -60,7 +64,12 @@ var MovieView = Backbone.View.extend({
                         </div>'),
 
   initialize: function() {
-    // your code here
+    //this = MovieView
+
+    //Want to listen for changes on the model
+
+    console.log('this in movie view: ', this);
+    this.model.on('change', this.render, this);
   },
 
   events: {
@@ -68,6 +77,7 @@ var MovieView = Backbone.View.extend({
   },
 
   handleClick: function() {
+    this.model.toggleLike();
     // your code here
   },
 
@@ -82,6 +92,7 @@ var MoviesView = Backbone.View.extend({
 
   initialize: function() {
     // your code here
+    this.collection.on('sort', this.render, this);
   },
 
   render: function() {
